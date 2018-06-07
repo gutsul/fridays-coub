@@ -52,6 +52,10 @@ def add_coub(args):
     conn.close()
 
 
+def publish(args):
+  print("Publish!")
+
+
 def parse_args():
   DESCRIPTION = "Friday's Coub"
 
@@ -59,8 +63,11 @@ def parse_args():
   subparsers = parser.add_subparsers()
 
   parser_add = subparsers.add_parser('add', help='Add a new coub to library')
-  parser.add_argument('url', help='Coub URL.')
+  parser_add.add_argument('url', help='Coub URL.')
   parser_add.set_defaults(func=add_coub)
+
+  parser_publish = subparsers.add_parser('publish', help='Publish coub to slack community')
+  parser_publish.set_defaults(func=publish)
 
   return parser.parse_args()
 
