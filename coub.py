@@ -23,8 +23,18 @@ def is_coub(url):
   return re.match(regex, url)
 
 
-def add_coub(url):
-  sql = "INSERT INTO coubs (url) VALUES ('{0}')".format(url)
+def add_coub(args):
+
+  if args.url is None:
+    print("ERROR: URL can't be empty.")
+    exit(1)
+
+  if not is_coub(args.url):
+    print("ERROR: URL is not coub.")
+    exit(2)
+
+
+  sql = "INSERT INTO coubs (url) VALUES ('{0}')".format(args.url)
 
   try:
     conn = sqlite3.connect(DB_LOCATION)
@@ -42,26 +52,22 @@ def add_coub(url):
     conn.close()
 
 
-
-def main():
+def parse_args():
   DESCRIPTION = "Friday's Coub"
 
   parser = argparse.ArgumentParser(description=DESCRIPTION)
-  parser.add_argument('-a', '--add', action='store', dest='url', help='Add coub URL.')
+  subparsers = parser.add_subparsers()
 
-  args = parser.parse_args()
+  parser_add = subparsers.add_parser('add', help='Add a new coub to library')
+  parser.add_argument('url', help='Coub URL.')
+  parser_add.set_defaults(func=add_coub)
 
-
-  if args.url is None:
-    print("ERROR: URL cann't be empty.")
-    exit(1)
-
-  if not is_coub(args.url):
-    print("ERROR: URL is not coub.")
-    exit(2)
+  return parser.parse_args()
 
 
-  add_coub(url=args.url)
+def main():
+  args = parse_args()
+  args.func(args)
 
 
 if __name__ == '__main__':
