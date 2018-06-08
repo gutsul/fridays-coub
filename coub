@@ -55,6 +55,7 @@ def add_coub(args):
 def publish(args):
   print("Publish!")
 
+
 def show_statistic(args):
   print("Show statistic!")
 
