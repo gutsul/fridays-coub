@@ -4,6 +4,7 @@ import sqlite3
 import argparse
 from sqlite3 import Error
 
+import db
 from settings import DB_LOCATION
 
 
@@ -33,23 +34,7 @@ def add_coub(args):
     print("ERROR: URL is not coub.")
     exit(2)
 
-
-  sql = "INSERT INTO coubs (url) VALUES ('{0}')".format(args.url)
-
-  try:
-    conn = sqlite3.connect(DB_LOCATION)
-    c = conn.cursor()
-    c.execute(sql)
-    conn.commit()
-
-    print("Coub added.")
-
-  except sqlite3.IntegrityError as e:
-    print("Coub already exists in a library.")
-  except Error as e:
-    print("Other error: {0}".format(e))
-  finally:
-    conn.close()
+  db.add_coub(args.url)
 
 
 def publish(args):
@@ -57,19 +42,8 @@ def publish(args):
 
 
 def show_statistic(args):
-  size = 0
-  new_coubs = 0
-
-  try:
-    conn = sqlite3.connect(DB_LOCATION)
-    c = conn.cursor()
-    size = c.execute("SELECT count(*) from coubs").fetchone()[0]
-    new_coubs = c.execute("SELECT count(*) FROM coubs WHERE views = 0").fetchone()[0]
-
-  except Error as e:
-    print("Other error: {0}".format(e))
-  finally:
-    conn.close()
+  size = db.get_library_size()
+  new_coubs = db.get_new_coubs_size()
 
   print("Library size: {}".format(size))
   print("New coubs: {}".format(new_coubs))
