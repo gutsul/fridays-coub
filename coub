@@ -57,7 +57,22 @@ def publish(args):
 
 
 def show_statistic(args):
-  print("Show statistic!")
+  size = 0
+  new_coubs = 0
+
+  try:
+    conn = sqlite3.connect(DB_LOCATION)
+    c = conn.cursor()
+    size = c.execute("SELECT count(*) from coubs").fetchone()[0]
+    new_coubs = c.execute("SELECT count(*) FROM coubs WHERE views = 0").fetchone()[0]
+
+  except Error as e:
+    print("Other error: {0}".format(e))
+  finally:
+    conn.close()
+
+  print("Library size: {}".format(size))
+  print("New coubs: {}".format(new_coubs))
 
 
 def parse_args():
