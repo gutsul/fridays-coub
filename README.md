@@ -51,7 +51,7 @@ sudo crontab -e
 # Add lines below to end of file:
 
 # Publish coub at 17:55 of Friday
-55 17 * * 5 /usr/src/gcloud-resize/fridays-coub/coub publish 
+55 17 * * 5 /usr/src/fridays-coub/coub publish 
 ```
 
 ## Settings
