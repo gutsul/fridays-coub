@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
+import json
 import re
 import sqlite3
 import argparse
 from sqlite3 import Error
 from random import randint
 
+import requests
+
 import db
-from settings import DB_LOCATION
+from settings import DB_LOCATION, SLACK_WEBHOOK
 
 
 def create_db():
@@ -57,13 +60,20 @@ def get_random_coub():
 
 
 def publish(args):
-  # print("Publish!")
 
   coub = get_random_coub()
 
-  coub.viewed()
-  db.update_coub(coub)
-  print("Choosed Coub (id: {0})".format(coub.id))
+  payload = {
+    "text": "A work day is over.\n Human, watch a *Friday's coub #{0}* and have a nice weekend!\n {1}".format(coub.id, coub.url),
+    "mrkdwn": True
+  }
+
+  r = requests.post(SLACK_WEBHOOK, data=json.dumps(payload))
+
+  if r.status_code == 200:
+    coub.viewed()
+    db.update_coub(coub)
+    print("Published coub (id: {0})".format(coub.id))
 
 
 def show_statistic(args):
