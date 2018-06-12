@@ -33,6 +33,11 @@ def get_library_size():
   return size
 
 
+def reset_statistic():
+  sql = 'UPDATE coubs SET views = 0'
+  insert(sql)
+
+
 def get_new_coubs_size():
   sql = 'SELECT count(*) FROM coubs WHERE views = 0'
   size = select(sql).fetchone()[0]
@@ -40,30 +45,18 @@ def get_new_coubs_size():
   return size
 
 
+def get_coubs(views):
+  sql = 'SELECT id FROM coubs WHERE views < {0}'.format(views)
+  coubs_ids = select(sql).fetchall()
+
+  return coubs_ids
+
+
 def get_max_coub_views():
   sql = 'SELECT max(views) FROM coubs'
   max_coub_views = select(sql).fetchone()[0]
 
   return max_coub_views
-
-
-def get_min_coub_views():
-  sql = 'SELECT min(views) FROM coubs'
-  min_coub_views = select(sql).fetchone()[0]
-
-  return min_coub_views
-
-
-def get_total_coub_views():
-  sql = 'SELECT sum(views) FROM coubs'
-  total_coub_views = select(sql).fetchone()[0]
-
-  return total_coub_views
-
-
-def reset_statistic():
-  sql = 'UPDATE coubs SET views = 0'
-  insert(sql)
 
 
 def add_coub(url):
@@ -76,10 +69,10 @@ def add_coub(url):
 
 
 def get_coub(id):
-  sql = 'SELECT id, views FROM coubs WHERE id = {0}'.format(id)
+  sql = 'SELECT id, url, views FROM coubs WHERE id = {0}'.format(id)
   result = select(sql).fetchone()
 
-  return Coub(id=result[0], views=result[1])
+  return Coub(id=result[0], url= result[1], views=result[2])
 
 
 def update_coub(coub):

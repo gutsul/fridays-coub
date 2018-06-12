@@ -41,51 +41,29 @@ def add_coub(args):
 def get_random_coub():
   library_size = db.get_library_size()
   max_views = db.get_max_coub_views()
-  min_views = db.get_min_coub_views()
-  total_views = db.get_total_coub_views()
 
-  if max_views != min_views:
+  coubs_sample = db.get_coubs(max_views)
+  coubs_sample_size = len(coubs_sample)
 
-    while True:
+  random_coub_id = randint(1, library_size)
 
-      random_coub_id = randint(1, library_size)
-      random_coub = db.get_coub(random_coub_id)
+  if coubs_sample_size != 0:
+    random_index = randint(0, coubs_sample_size - 1)
+    random_coub_id = coubs_sample[random_index][0]
 
-      choise = (max_views - random_coub.views)/ total_views
+  random_coub = db.get_coub(random_coub_id)
 
-      # choise = round(choise, 2)
-
-      limit = 1 / library_size
-
-      print("choise: {0} > limit: {1} random: {2} | total: {3} min: {4} max: {5}".format(choise, limit,
-                                random_coub_id, total_views, min_views, max_views))
-
-      if choise >= limit:
-        random_coub.increase_view()
-        db.update_coub(random_coub)
-        print("Choosed Coub (id: {0})".format(random_coub_id))
-        print()
-        break;
-
-  else:
-    random_coub_id = randint(1, library_size)
-    random_coub = db.get_coub(random_coub_id)
-
-    random_coub.increase_view()
-    db.update_coub(random_coub)
-
-    print("Initialized Coub (id: {0})".format(random_coub_id))
-    print()
+  return random_coub
 
 
 def publish(args):
-  print("Publish!")
+  # print("Publish!")
 
-  db.reset_statistic()
+  coub = get_random_coub()
 
-  for n in range(0,100):
-    print("Iteration: {}".format(n))
-    get_random_coub()
+  coub.viewed()
+  db.update_coub(coub)
+  print("Choosed Coub (id: {0})".format(coub.id))
 
 
 def show_statistic(args):

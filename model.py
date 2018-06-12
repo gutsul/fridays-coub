@@ -2,13 +2,14 @@
 class Coub:
 
   id = 0
-  # url = None
+  url = None
   views = 0
 
-  def __init__(self, id, views):
+  def __init__(self, id, url, views):
     self.id = id
+    self.url = url
     self.views = views
 
 
-  def increase_view(self):
+  def viewed(self):
     self.views += 1
