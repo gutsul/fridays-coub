@@ -97,7 +97,7 @@ def parse_args():
   parser_publish = subparsers.add_parser('publish', help='Publish coub to slack community')
   parser_publish.set_defaults(func=publish)
 
-  parser_statistic = subparsers.add_parser('statistic', help='Show library statistic.')
+  parser_statistic = subparsers.add_parser('stat', help='Show library statistic.')
   parser_statistic.set_defaults(func=show_statistic)
 
   return parser.parse_args()
