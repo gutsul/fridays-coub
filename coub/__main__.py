@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import json
-import re
 import sqlite3
 import argparse
 from sqlite3 import Error
@@ -8,8 +7,9 @@ from random import randint
 
 import requests
 
-from src import db
-from src.settings import DB_LOCATION, SLACK_WEBHOOK
+from . import db
+from .settings import DB_LOCATION, SLACK_WEBHOOK
+from .utils import is_coub
 
 
 def create_db():
@@ -21,11 +21,6 @@ def create_db():
     print(e)
   finally:
     conn.close()
-
-
-def is_coub(url):
-  regex = re.compile("^(?:http|ftp)s?:\/\/coub.com\/view\/[\d\w]+", re.IGNORECASE)
-  return re.match(regex, url)
 
 
 def add_coub(args):

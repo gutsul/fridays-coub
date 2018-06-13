@@ -1,7 +1,7 @@
 import sqlite3
 
-from src.model import Coub
-from src.settings import DB_LOCATION
+from .model import Coub
+from .settings import DB_LOCATION
 
 
 def select(sql):
