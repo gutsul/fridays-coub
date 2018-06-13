@@ -8,8 +8,8 @@ from random import randint
 
 import requests
 
-import db
-from settings import DB_LOCATION, SLACK_WEBHOOK
+from src import db
+from src.settings import DB_LOCATION, SLACK_WEBHOOK
 
 
 def create_db():
