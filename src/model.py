@@ -10,6 +10,5 @@ class Coub:
     self.url = url
     self.views = views
 
-
   def viewed(self):
     self.views += 1
