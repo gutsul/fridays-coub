@@ -6,7 +6,9 @@ from sqlite3 import Error
 from random import randint
 
 import requests
+import sys
 
+from coub import utils
 from . import db
 from .settings import DB_LOCATION, SLACK_WEBHOOK
 from .utils import is_coub
@@ -71,12 +73,18 @@ def publish(args):
     print("Published coub (id: {0})".format(coub.id))
 
 
+
+
 def show_statistic(args):
   size = db.get_library_size()
   new_coubs = db.get_new_coubs_size()
 
   print("Library size: {}".format(size))
   print("New coubs: {}".format(new_coubs))
+
+  data_path = sys.prefix + "/coubs.db"
+
+  print(data_path)
 
 
 def parse_args():
